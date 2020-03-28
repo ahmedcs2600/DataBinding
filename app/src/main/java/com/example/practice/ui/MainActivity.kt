@@ -11,16 +11,16 @@ import com.example.practice.ui.fragments.ProjectListFragment
 
 class MainActivity : BaseActivity() {
 
-    override val mFragmentContainerId: Int?
-        get() = mActivityBinding?.fragmentContainer?.id
+    override val mFragmentContainerId: Int
+        get() = mActivityBinding.fragmentContainer.id
 
-    var mActivityBinding: ActivityMainBinding? = null
+    private lateinit var mActivityBinding: ActivityMainBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mActivityBinding =
-            DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
 
 
         if (savedInstanceState == null) {
@@ -29,7 +29,15 @@ class MainActivity : BaseActivity() {
     }
 
     fun setLoadingState(state : NetworkState){
-        Log.e("Test",state.toString())
+        when(state){
+            NetworkState.LOADED, NetworkState.FAILED -> {
+                mActivityBinding.isLoading = false
+            }
+            NetworkState.LOADING -> {
+                mActivityBinding.isLoading = true
+            }
+        }
+
     }
 
 }

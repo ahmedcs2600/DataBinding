@@ -1,7 +1,7 @@
 package com.example.practice.network
 
 import com.example.practice.models.Project
-import retrofit2.Call
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -13,8 +13,8 @@ interface GithubService {
     }
 
     @GET("users/{user}/repos")
-    fun getProjectList(@Path("user") user: String): Call<List<Project>>
+    fun getProjectList(@Path("user") user: String): Single<List<Project>>
 
     @GET("/repos/{user}/{reponame}")
-    fun getProjectDetails(@Path("user") user: String, @Path("reponame") projectName: String): Call<Project>
+    fun getProjectDetails(@Path("user") user: String?, @Path("reponame") projectName: String): Single<Project>
 }

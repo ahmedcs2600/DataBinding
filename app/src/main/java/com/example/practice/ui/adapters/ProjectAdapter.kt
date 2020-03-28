@@ -13,7 +13,7 @@ import com.example.practice.models.Project
 class ProjectAdapter(private val mListener: ItemClickListener<Project>) :
     RecyclerView.Adapter<ProjectAdapter.ViewHolder>() {
 
-    var mDataSet: MutableList<Project> = ArrayList()
+    private val mDataSet: MutableList<Project> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ProjectListItemBinding>(

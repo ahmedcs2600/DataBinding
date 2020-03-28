@@ -2,7 +2,6 @@ package com.example.practice.ui.fragments
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,9 @@ class ProjectDetailFragment : BaseFragment() {
     private val viewModel by viewModels<ProjectDetailViewModel>()
 
     private lateinit var mBinding: FragmentProjectDetailBinding
+
+    private val mProjectId : String?
+    get() = arguments?.getString(BUNDLE_PROJECT_ID)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,15 +44,16 @@ class ProjectDetailFragment : BaseFragment() {
 
     private fun bindViewModel(){
         with(viewModel){
-            getProjectByProjectId().observe(this@ProjectDetailFragment, Observer {
+            mProjectLiveData.observe(viewLifecycleOwner, Observer {
                 it?.let { project -> setProject(project) }
             })
+            getProjectByProjectId(mProjectId)
         }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(mProjectId: String) = ProjectListFragment().apply {
+        fun newInstance(mProjectId: String) = ProjectDetailFragment().apply {
             arguments = Bundle().apply {
                 putString(BUNDLE_PROJECT_ID, mProjectId)
             }

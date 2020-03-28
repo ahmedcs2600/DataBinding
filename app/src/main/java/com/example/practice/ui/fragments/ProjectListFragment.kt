@@ -47,11 +47,15 @@ class ProjectListFragment : BaseFragment() {
     }
 
     private fun bindViewModel() {
-        viewModel.getProjectList().observe(this, Observer {
-            it?.let {
-                mAdapter.updateList(it)
-            }
-        })
+        with(viewModel){
+            viewModel.mProjectListLiveData.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    mAdapter.updateList(it)
+                }
+            })
+
+            getProjectList()
+        }
     }
 
     private fun setUpAdapter() {

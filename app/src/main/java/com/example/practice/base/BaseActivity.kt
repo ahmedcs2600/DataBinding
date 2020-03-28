@@ -8,15 +8,22 @@ abstract class BaseActivity : AppCompatActivity() {
     private val mSupportFragmentManager
         get() = supportFragmentManager
 
-    abstract val mFragmentContainerId : Int?
+    private val mBackStackEntry : Int
+    get() = mSupportFragmentManager.backStackEntryCount
 
+    abstract val mFragmentContainerId : Int
 
-    fun changeFragment(mFragment: Fragment,tag : String?) {
-        mFragmentContainerId?.let {
-            mSupportFragmentManager.commit {
-                replace(it, mFragment)
-                addToBackStack(tag)
-            }
+    fun changeFragment(mFragment: Fragment, tag: String?) {
+        mSupportFragmentManager.commit {
+            replace(mFragmentContainerId, mFragment)
+            addToBackStack(tag)
         }
+    }
+
+    override fun onBackPressed() {
+        if(mBackStackEntry > 1)
+            super.onBackPressed()
+        else
+            finish()
     }
 }

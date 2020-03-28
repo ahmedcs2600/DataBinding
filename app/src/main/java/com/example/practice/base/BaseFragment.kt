@@ -8,7 +8,7 @@ import com.example.practice.viewmodel.BaseViewModel
 
 abstract class BaseFragment : Fragment() {
 
-    abstract val mViewModel : BaseViewModel
+    abstract val mViewModel : BaseViewModel?
 
     private val mBaseActivity: BaseActivity
         get() = activity as BaseActivity
@@ -23,8 +23,10 @@ abstract class BaseFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel.mLoadingLiveData.observe(this, Observer {
-            mActivity.setLoadingState(it)
-        })
+        mViewModel?.let {
+            it.mLoadingLiveData.observe(viewLifecycleOwner, Observer { state ->
+                mActivity.setLoadingState(state)
+            })
+        }
     }
 }

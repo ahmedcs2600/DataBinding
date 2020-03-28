@@ -1,13 +1,11 @@
 package com.example.practice.repository
 
-import androidx.annotation.MainThread
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.practice.models.Project
 import com.example.practice.network.RetrofitClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+
 
 class AppRepository private constructor() {
 
@@ -31,37 +29,12 @@ class AppRepository private constructor() {
         }
     }
 
+    fun getProjectList(mUserId: String): Single<List<Project>> =
+         service.getProjectList(mUserId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
-    @MainThread
-    fun getProjectList(mUserId: String): LiveData<List<Project>?> =
-        MutableLiveData<List<Project>?>().also {
-            service.getProjectList(mUserId).enqueue(object : Callback<List<Project>> {
-                override fun onFailure(call: Call<List<Project>>, t: Throwable) {
-                    it.value = null
-                }
 
-                override fun onResponse(
-                    call: Call<List<Project>>,
-                    response: Response<List<Project>>
-                ) {
-                    response.body()?.let { data ->
-                        it.value = data
-                    }
-                }
-            })
-        }
+    fun getProjectDetails(userId: String?, projectName: String): Single<Project?> =
+         service.getProjectDetails(userId,projectName).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
-    @MainThread
-    fun getProjectDetails(userId: String, projectName: String): LiveData<Project?> =
-        MutableLiveData<Project?>().also {
-            service.getProjectDetails(userId, projectName).enqueue(object : Callback<Project> {
-                override fun onFailure(call: Call<Project>, t: Throwable) {
-                    it.value = null
-                }
 
-                override fun onResponse(call: Call<Project>, response: Response<Project>) {
-                    response.body()?.let { data -> it.value = data }
-                }
-            })
-        }
 }
