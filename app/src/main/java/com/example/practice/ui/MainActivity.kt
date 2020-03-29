@@ -1,7 +1,6 @@
 package com.example.practice.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.practice.R
 import com.example.practice.base.BaseActivity
