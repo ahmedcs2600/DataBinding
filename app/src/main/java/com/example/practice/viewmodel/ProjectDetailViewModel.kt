@@ -52,7 +52,6 @@ class ProjectDetailViewModel() : BaseViewModel() {
         super.onCleared()
         with(compositeDisposable){
             clear()
-            dispose()
         }
     }
 }

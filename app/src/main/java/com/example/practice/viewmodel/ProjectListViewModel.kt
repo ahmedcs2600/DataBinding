@@ -43,7 +43,6 @@ class ProjectListViewModel : BaseViewModel(){
         super.onCleared()
         with(compositeDisposable) {
             clear()
-            dispose()
         }
     }
 }
