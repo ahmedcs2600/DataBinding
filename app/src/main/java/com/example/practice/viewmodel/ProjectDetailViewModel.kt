@@ -10,7 +10,7 @@ import com.example.practice.repository.AppRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 
-class ProjectDetailViewModel() : BaseViewModel() {
+class ProjectDetailViewModel : BaseViewModel() {
 
     val project: ObservableField<Project> = ObservableField()
 
@@ -26,11 +26,10 @@ class ProjectDetailViewModel() : BaseViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
-    @MainThread
     fun getProjectByProjectId(projectId: String?) {
         mLoadingState.value = NetworkState.LOADING
 
-        mAppRepository.getProjectDetails(projectId, "Google").subscribeWith(object : DisposableSingleObserver<Project>(){
+        mAppRepository.getProjectDetails( "Google",projectId).subscribeWith(object : DisposableSingleObserver<Project>(){
             override fun onSuccess(data: Project) {
                 mProject.value = data
                 mLoadingState.value = NetworkState.LOADED
@@ -46,6 +45,7 @@ class ProjectDetailViewModel() : BaseViewModel() {
 
     fun setProject(mProject: Project) {
         this.project.set(mProject)
+
     }
 
     override fun onCleared() {

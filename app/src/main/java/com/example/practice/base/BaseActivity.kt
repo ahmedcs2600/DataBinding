@@ -1,29 +1,37 @@
 package com.example.practice.base
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import com.example.practice.App
+import com.example.practice.models.NetworkState
 
 abstract class BaseActivity : AppCompatActivity() {
-    private val mSupportFragmentManager
-        get() = supportFragmentManager
 
-    private val mBackStackEntry : Int
-    get() = mSupportFragmentManager.backStackEntryCount
+    private val mBackStackEntry: Int
+        get() = supportFragmentManager.backStackEntryCount
 
-    abstract val mFragmentContainerId : Int
+    abstract val mFragmentContainerId: Int
 
-    fun changeFragment(mFragment: Fragment, tag: String?) {
-        mSupportFragmentManager.commit {
-            replace(mFragmentContainerId, mFragment)
-            addToBackStack(tag)
-        }
-    }
+
+    val app : App
+    get() = application as App
+
 
     override fun onBackPressed() {
-        if(mBackStackEntry > 1)
+        if (mBackStackEntry > 1)
             super.onBackPressed()
         else
             finish()
     }
+
+
+    fun setLoadingState(state: NetworkState) {
+        when (state) {
+            NetworkState.LOADED, NetworkState.FAILED -> onRequestComplete()
+            NetworkState.LOADING -> onLoading()
+        }
+    }
+
+    abstract fun onLoading()
+
+    abstract fun onRequestComplete()
 }

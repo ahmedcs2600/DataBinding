@@ -1,13 +1,12 @@
-package com.example.practice.ui
+package com.example.practice.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.practice.R
 import com.example.practice.base.BaseActivity
 import com.example.practice.databinding.ActivityMainBinding
-import com.example.practice.models.NetworkState
 import com.example.practice.ui.fragments.ProjectListFragment
+import com.example.practice.utils.replaceFragment
 
 class MainActivity : BaseActivity() {
 
@@ -24,20 +23,18 @@ class MainActivity : BaseActivity() {
 
 
         if (savedInstanceState == null) {
-            changeFragment(ProjectListFragment.newInstance(), ProjectListFragment::class.java.simpleName)
+            replaceFragment(
+                ProjectListFragment.newInstance(),
+                ProjectListFragment::class.java.simpleName
+            )
         }
     }
 
-    fun setLoadingState(state : NetworkState){
-        when(state){
-            NetworkState.LOADED, NetworkState.FAILED -> {
-                mActivityBinding.isLoading = false
-            }
-            NetworkState.LOADING -> {
-                mActivityBinding.isLoading = true
-            }
-        }
-
+    override fun onLoading() {
+        mActivityBinding.isLoading = true
     }
 
+    override fun onRequestComplete() {
+        mActivityBinding.isLoading = false
+    }
 }

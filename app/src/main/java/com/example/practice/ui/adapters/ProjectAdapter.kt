@@ -2,6 +2,7 @@ package com.example.practice.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practice.R
@@ -18,11 +19,11 @@ class ProjectAdapter(private val mListener: ItemClickListener<Project>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ProjectListItemBinding>(
             LayoutInflater.from(parent.context),
-            R.layout.project_list_item,
+            ViewHolder.mLayoutRes,
             parent,
             false
         ).run {
-            ViewHolder(this)
+            ViewHolder(this, mListener)
         }
 
 
@@ -39,15 +40,21 @@ class ProjectAdapter(private val mListener: ItemClickListener<Project>) :
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(private val mBinding: ProjectListItemBinding) :
+    class ViewHolder(
+        private val mBinding: ProjectListItemBinding,
+        private val mListener: ItemClickListener<Project>) :
         RecyclerView.ViewHolder(mBinding.root) {
+
+        companion object {
+            @LayoutRes const val mLayoutRes = R.layout.project_list_item
+        }
 
         internal fun onBind(project: Project) {
             with(mBinding) {
                 data = project
                 listener = mListener
+                position = adapterPosition
             }
-
         }
     }
 }

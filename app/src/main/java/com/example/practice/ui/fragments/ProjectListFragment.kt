@@ -14,6 +14,7 @@ import com.example.practice.callback.ItemClickListener
 import com.example.practice.databinding.FragmentProjectListBinding
 import com.example.practice.models.Project
 import com.example.practice.ui.adapters.ProjectAdapter
+import com.example.practice.utils.createDialog
 import com.example.practice.viewmodel.BaseViewModel
 import com.example.practice.viewmodel.ProjectListViewModel
 
@@ -47,21 +48,28 @@ class ProjectListFragment : BaseFragment() {
     }
 
     private fun bindViewModel() {
-        with(viewModel){
-            viewModel.mProjectListLiveData.observe(viewLifecycleOwner, Observer {
+        with(viewModel) {
+            mProjectListLiveData.observe(this@ProjectListFragment, Observer {
                 it?.let {
                     mAdapter.updateList(it)
                 }
             })
-
             getProjectList()
         }
     }
 
     private fun setUpAdapter() {
         mAdapter = ProjectAdapter(object : ItemClickListener<Project> {
-            override fun onClick(item: Project) {
-                changeFragment(ProjectDetailFragment.newInstance(item.id.toString()),ProjectDetailFragment::class.java.simpleName)
+            override fun onClick(item: Project,position : Int) {
+                createDialog(R.string.app_name, R.string.app_name) {
+                    setPositiveButton(R.string.app_name) { d, i ->
+                        changeFragment(
+                            ProjectDetailFragment.newInstance(item.name),
+                            ProjectDetailFragment::class.java.simpleName
+                        )
+                    }
+                }
+
             }
         })
         with(binding) {

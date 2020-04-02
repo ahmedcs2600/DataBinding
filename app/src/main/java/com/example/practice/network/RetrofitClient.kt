@@ -8,24 +8,24 @@ class RetrofitClient {
 
     companion object {
         @Volatile
-        private lateinit var mGithubService: GithubService
+        private lateinit var mGithubService: WebService
 
-        fun getInstance(): GithubService {
+        fun getInstance(): WebService {
             if (!(::mGithubService.isInitialized)) {
                 synchronized(this) {
-                    mGithubService = getGithubService()
+                    mGithubService = getWebService()
                 }
             }
             return mGithubService
         }
 
-        private fun getGithubService() : GithubService {
+        private fun getWebService() : WebService {
             return Retrofit.Builder()
-                .baseUrl(GithubService.HTTPS_API_GITHUB_URL)
+                .baseUrl(WebService.HTTPS_API_GITHUB_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().run {
-                    create(GithubService::class.java)
+                    create(WebService::class.java)
                 }
         }
     }

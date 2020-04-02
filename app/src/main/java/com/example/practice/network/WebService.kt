@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 
-interface GithubService {
+interface WebService {
 
     companion object{
         const val HTTPS_API_GITHUB_URL = "https://api.github.com/"
@@ -16,5 +16,5 @@ interface GithubService {
     fun getProjectList(@Path("user") user: String): Single<List<Project>>
 
     @GET("/repos/{user}/{reponame}")
-    fun getProjectDetails(@Path("user") user: String?, @Path("reponame") projectName: String): Single<Project>
+    fun getProjectDetails(@Path("user") user: String, @Path("reponame") projectName: String?): Single<Project>
 }
